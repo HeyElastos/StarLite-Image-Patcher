@@ -1,0 +1,79 @@
+{
+  "app-id": "io.openfyde.StarLitePatcher",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "48",
+  "sdk": "org.gnome.Sdk",
+  "command": "starlite-patcher",
+  "finish-args": [
+    "--share=ipc",
+    "--socket=wayland",
+    "--socket=fallback-x11",
+    "--filesystem=host",
+    "--device=all",
+    "--talk-name=org.freedesktop.Flatpak"
+  ],
+  "cleanup": [
+    "/include",
+    "/lib/pkgconfig",
+    "/share/pkgconfig",
+    "/share/aclocal",
+    "/man",
+    "/share/man",
+    "/share/gtk-doc",
+    "/share/vala",
+    "*.la",
+    "*.a"
+  ],
+  "modules": [
+    {
+      "name": "pycairo",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dtests=false"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/pygobject/pycairo/releases/download/v1.27.0/pycairo-1.27.0.tar.gz",
+          "sha256": "5cb21e7a00a2afcafea7f14390235be33497a2cce53a98a19389492a60628430"
+        }
+      ]
+    },
+    {
+      "name": "pygobject",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dtests=false",
+        "-Dpycairo=enabled"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://download.gnome.org/sources/pygobject/3.50/pygobject-3.50.0.tar.xz",
+          "sha256": "8d836e75b5a881d457ee1622cae4a32bcdba28a0ba562193adb3bbb472472212"
+        }
+      ]
+    },
+    {
+      "name": "starlite-patcher",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -d /app/lib/python3/site-packages/starlite_patcher",
+        "install -m 644 starlite_patcher/__init__.py /app/lib/python3/site-packages/starlite_patcher/",
+        "install -m 644 starlite_patcher/__main__.py /app/lib/python3/site-packages/starlite_patcher/",
+        "install -m 644 starlite_patcher/main.py /app/lib/python3/site-packages/starlite_patcher/",
+        "install -m 644 starlite_patcher/patcher.py /app/lib/python3/site-packages/starlite_patcher/",
+        "install -D -m 755 data/starlite-patcher /app/bin/starlite-patcher",
+        "install -D -m 644 io.openfyde.StarLitePatcher.desktop /app/share/applications/io.openfyde.StarLitePatcher.desktop",
+        "install -D -m 644 io.openfyde.StarLitePatcher.metainfo.xml /app/share/metainfo/io.openfyde.StarLitePatcher.metainfo.xml",
+        "install -D -m 644 io.openfyde.StarLitePatcher.svg /app/share/icons/hicolor/scalable/apps/io.openfyde.StarLitePatcher.svg"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "."
+        }
+      ]
+    }
+  ]
+}

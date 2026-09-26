@@ -1,0 +1,23 @@
+# StarLite accelerometer → Ash auto-rotate (iioservice)
+# ChromeOS 60-sensor.rules looks up:
+#   sensor:modalias:$attr{modalias}:$attr{[dmi/id]modalias}
+# This board's parent modalias is acpi:MXC6655:MXC6655: (trailing colon),
+# so the hwdb key contains a double colon before dmi.
+# ACCEL_LOCATION must be lid|base — "display" is ignored.
+sensor:modalias:acpi:MXC6655:MXC6655::dmi:*
+sensor:modalias:acpi:MXC4005:MXC4005::dmi:*
+sensor:modalias:i2c:mxc4005*:dmi:*
+sensor:modalias:i2c:mxc6655*:dmi:*
+sensor:modalias:i2c:mxc4005*:dmi:*:svnStar*Labs*:pnStarLite*:
+sensor:modalias:i2c:mxc6655*:dmi:*:svnStar*Labs*:pnStarLite*:
+sensor:modalias:acpi:MXC6655*:dmi:*
+sensor:modalias:acpi:MXC4005*:dmi:*
+sensor:modalias:acpi:MDA6655*:dmi:*
+sensor:modalias:acpi:MXC6655*:dmi:*:svnStar*Labs*:pnStarLite*:
+sensor:modalias:acpi:MXC4005*:dmi:*:svnStar*Labs*:pnStarLite*:
+ ACCEL_MOUNT_MATRIX=-1, 0, 0; 0, 1, 0; 0, 0, 1
+ ACCEL_LOCATION=lid
+
+sensor:modalias:acpi:KIOX000A*:dmi:*
+ ACCEL_MOUNT_MATRIX=1, 0, 0; 0, -1, 0; 0, 0, 1
+ ACCEL_LOCATION=lid

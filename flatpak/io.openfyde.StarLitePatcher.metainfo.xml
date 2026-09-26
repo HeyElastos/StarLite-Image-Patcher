@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.openfyde.StarLitePatcher</id>
+  <name>StarLite Image Patcher</name>
+  <summary>Patch FydeOS/openFyde images for Star Labs StarLite</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer_name>HeyElastos</developer_name>
+  <description>
+    <p>
+      Point-and-click front end for the openfyde-starlite inject script.
+      Choose a FydeOS or OpenFyde .bin image. The patcher reads that image's
+      release and kernel, then picks the accelerometer module built for that
+      kernel. It does not replace the kernel. The result keeps accelerometer
+      rotation, BlueZ instead of Floss, brightness-remember, lid-touch-guard,
+      external-only, tablet-switch, power-sleep, verity re-seal, and the held
+      Wi-Fi and TPM fixes.
+    </p>
+    <p>
+      The Flatpak UI runs the host patcher via flatpak-spawn --host because
+      guestfish/losetup/verity cannot run reliably inside the sandbox.
+      Requires the openfyde-starlite checkout on the host (v1).
+    </p>
+  </description>
+  <launchable type="desktop-id">io.openfyde.StarLitePatcher.desktop</launchable>
+  <url type="homepage">https://github.com/HeyElastos/StarLite-Image-Patcher</url>
+  <provides>
+    <binary>starlite-patcher</binary>
+  </provides>
+  <releases>
+    <release version="1.2.0" date="2026-09-26"/>
+    <release version="1.1.0" date="2026-09-25"/>
+    <release version="1.0.0" date="2026-09-20"/>
+  </releases>
+  <content_rating type="oars-1.1"/>
+</component>

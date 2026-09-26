@@ -1,0 +1,6 @@
+#!/bin/sh
+# Do not mark a USB boot as "skip TPM ownership".
+# The real is_running_from_installer stays, so the local-account screen stays.
+# Touching /run/tpm_manager/no_preinit is what left the TPM unready and
+# blocked a password account.
+exit 0

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Retired. Unloading iwlwifi and restarting shill dropped a working link.
+echo "elastos-wifi-heal: retired; not unloading iwlwifi" >&2
+exit 0

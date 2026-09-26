@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ -d /app/lib/python3/site-packages/starlite_patcher ]]; then
+  export PYTHONPATH="/app/lib/python3/site-packages${PYTHONPATH:+:$PYTHONPATH}"
+elif [[ -d "$HERE/starlite_patcher" ]]; then
+  export PYTHONPATH="$HERE${PYTHONPATH:+:$PYTHONPATH}"
+fi
+exec python3 -m starlite_patcher "$@"

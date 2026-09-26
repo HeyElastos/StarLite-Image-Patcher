@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=StarLite Image Patcher
+GenericName=Image Patcher
+Comment=Prepare a FydeOS or OpenFyde image for the Star Labs StarLite
+Exec=starlite-patcher
+Icon=io.openfyde.StarLitePatcher
+Terminal=false
+Categories=System;Utility;
+Keywords=FydeOS;openFyde;StarLite;Star Labs;ChromeOS;
+StartupNotify=true

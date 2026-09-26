@@ -1,0 +1,44 @@
+#!/bin/bash
+# install-to-internal — raw-clone this booted StarLite USB onto the internal SSD.
+# Hardened per the wifi-ssd-fix workflow. DO NOT use the on-screen GUI installer:
+# its postinst re-locks dm-verity against the modified rootfs -> "PostInstall Failed"
+# -> never sets the SSD kernel priority + regenerates GPT UUIDs -> stuck at boot.
+# This raw clone preserves the dev no-verity kernel, the matching root=PARTUUID, and
+# every fix (WiFi, Android, sleep/tablet/power).
+set -u
+SRC=$(rootdev -d -s 2>/dev/null)
+# pick the LARGEST fixed, real disk that isn't the source USB. excludes zram (RAM swap),
+# loop, dm, md, ram — the old auto-detect grabbed /dev/zram0 (RAM) by mistake.
+TGT=$(lsblk -dpbno NAME,SIZE,TYPE,TRAN,RM | awk -v s="$SRC" '
+  $3=="disk" && $1!=s && $5==0 && $4!="usb" && $1 !~ /(zram|loop|\/dm-|\/ram|\/md)/ {print $2, $1}' \
+  | sort -rn | head -n1 | cut -d" " -f2)
+# fallback: same filter, tolerate removable-flag quirks on some NVMe
+[ -z "$TGT" ] && TGT=$(lsblk -dpbno NAME,SIZE,TYPE,TRAN | awk -v s="$SRC" '
+  $3=="disk" && $1!=s && $4!="usb" && $1 !~ /(zram|loop|\/dm-|\/ram|\/md)/ {print $2, $1}' \
+  | sort -rn | head -n1 | cut -d" " -f2)
+echo "============================================================"
+echo "  SOURCE (this USB)      : ${SRC:-?}   $(lsblk -dno SIZE "$SRC" 2>/dev/null)"
+echo "  TARGET (internal disk) : ${TGT:-NOT FOUND}   $(lsblk -dno SIZE "$TGT" 2>/dev/null)"
+echo "============================================================"
+{ [ -z "$SRC" ] || [ -z "$TGT" ]; } && { echo "Auto-detect failed — run 'lsblk' and dd by hand."; exit 1; }
+echo "This ERASES $TGT and writes the full StarLite image (WiFi + Android + all fixes)."
+read -rp "Type  YES  to install: " a
+[ "$a" = YES ] || { echo "Aborted — nothing changed."; exit 1; }
+# partition suffix: nvme/mmc -> pN, sd* -> N
+case "$TGT" in *[0-9]) P="p";; *) P="";; esac
+echo ">> raw-cloning $SRC -> $TGT (~7.5 GB) ..."
+dd if="$SRC" of="$TGT" bs=4M count=1900 status=progress conv=fsync && sync
+echo ">> repairing GPT for the (larger) internal disk ..."
+cgpt repair "$TGT" 2>/dev/null
+command -v sgdisk >/dev/null && sgdisk -e "$TGT" >/dev/null 2>&1
+partprobe "$TGT" 2>/dev/null; sleep 1
+echo ">> asserting bootable kernel (KERN-A priority) ..."
+cgpt add -i 2 -P 5 -S 1 -T 0 "$TGT" 2>/dev/null
+cgpt add -i 4 -P 0 -S 0 -T 0 "$TGT" 2>/dev/null
+echo ">> growing STATE to fill the disk ..."
+e2fsck -fy "${TGT}${P}1" >/dev/null 2>&1
+resize2fs "${TGT}${P}1" >/dev/null 2>&1
+cgpt repair "$TGT" 2>/dev/null
+echo ">> verify (KERN-A should read priority 5, successful 1, tries 0):"
+cgpt show "$TGT" 2>/dev/null | grep -iE 'KERN-A|priority' | head
+echo ">> DONE.  Remove the USB, then run:  sudo reboot"

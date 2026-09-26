@@ -1,0 +1,19 @@
+# StarLite: tag display IIO accel for iioservice auto-rotate
+ACTION!="add|change", GOTO="starlite_accel_end"
+SUBSYSTEM!="iio", GOTO="starlite_accel_end"
+
+ATTR{name}=="mxc4005", MODE="0660", GROUP="iioservice", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="-1, 0, 0; 0, 1, 0; 0, 0, 1"
+ATTR{name}=="mxc6655", MODE="0660", GROUP="iioservice", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="-1, 0, 0; 0, 1, 0; 0, 0, 1"
+ATTR{name}=="kxcjk1013", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="1, 0, 0; 0, -1, 0; 0, 0, 1"
+ATTR{name}=="kxcjk-1013", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="1, 0, 0; 0, -1, 0; 0, 0, 1"
+
+ATTRS{modalias}=="i2c:mxc4005*", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="-1, 0, 0; 0, 1, 0; 0, 0, 1"
+ATTRS{modalias}=="i2c:mxc6655*", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="-1, 0, 0; 0, 1, 0; 0, 0, 1"
+ATTRS{modalias}=="i2c:kxcjk1013*", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="1, 0, 0; 0, -1, 0; 0, 0, 1"
+ATTRS{modalias}=="acpi:MXC6655*", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="-1, 0, 0; 0, 1, 0; 0, 0, 1"
+ATTRS{modalias}=="acpi:MXC4005*", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="-1, 0, 0; 0, 1, 0; 0, 0, 1"
+ATTRS{modalias}=="acpi:MDA6655*", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="-1, 0, 0; 0, 1, 0; 0, 0, 1"
+ATTRS{modalias}=="acpi:KIOX000A*", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="1, 0, 0; 0, -1, 0; 0, 0, 1"
+ATTRS{modalias}=="acpi:KIOX010A*", ENV{ACCEL_LOCATION}="lid", ENV{ACCEL_MOUNT_MATRIX}="1, 0, 0; 0, -1, 0; 0, 0, 1"
+
+LABEL="starlite_accel_end"
