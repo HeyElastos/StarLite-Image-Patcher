@@ -1,6 +1,6 @@
 # StarLite Image Patcher
 
-Flatpak front end for the StarLite image script. App ID: `io.openfyde.StarLitePatcher`.
+Flatpak front end for the StarLite image script. App ID: `io.openfyde.StarLitePatcher`. FydeOS and OpenFyde use different accelerometer trigger names. The script selects the module that matches the image.
 
 The sandbox cannot run the image tools, so the app launches the host script with `flatpak-spawn --host`.
 

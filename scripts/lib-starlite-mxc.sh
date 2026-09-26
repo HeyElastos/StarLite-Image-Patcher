@@ -112,6 +112,22 @@ starlite_select_mxc_ko() {
   ok "mxc4005.ko selected: $MXC_KO (vermagic $MXC_VERMAGIC)"
 }
 
+# FydeOS iioservice only attaches an hrtimer named iioservice-%i.
+# OpenFyde iioservice accepts the driver's own trigger name.
+starlite_check_trigger_name() {
+  local family="$1"
+  local ko="$2"
+  local need=""
+  case "$family" in
+    FydeOS) need="iioservice-0" ;;
+    OpenFyde) need="mxc4005-hr" ;;
+    *) return 0 ;;
+  esac
+  python3 -c 'import sys; d=open(sys.argv[1],"rb").read(); raise SystemExit(0 if sys.argv[2].encode() in d else 1)' "$ko" "$need" \
+    || die "$family mxc4005.ko must contain trigger name $need"
+  ok "$family accelerometer trigger name $need"
+}
+
 # Optional: try to rebuild via build-mxc4005.sh before select. Non-fatal if blocked.
 starlite_ensure_mxc_for_kver() {
   local kver="$1"

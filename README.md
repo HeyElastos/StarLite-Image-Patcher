@@ -8,8 +8,8 @@ A newer release is recognized automatically. The build finishes when an accelero
 
 | Product | Release | Kernel | Result |
 |---|---|---|---|
-| OpenFyde | 16503.20.22.5 (`amd64-openfyde_iris`) | `6.6.99-09011-gfdc62122de5f-dirty` | Patched image boots. Rotation works. |
-| FydeOS for PC | v23.0-SP1, 16700.56.23.51 (`amd64-fydeos_iris-io`) | `6.12.54-01180-gb4e10020ba49-dirty` | Patch build completes for this kernel. |
+| OpenFyde | 16503.20.22.5 (`amd64-openfyde_iris`) | `6.6.99-09011-gfdc62122de5f-dirty` | Rotation works. Trigger name `mxc4005-hr`. |
+| FydeOS for PC | v23.0-SP1, 16700.56.23.51 (`amd64-fydeos_iris-io`) | `6.12.54-01180-gb4e10020ba49-dirty` | Rotation works. Trigger name `iioservice-0`. |
 
 ## Script
 

@@ -365,6 +365,9 @@ export STARLITE_SKIP_MXC=$SKIP_MXC
 # replacing vmlinuz is not allowed. The cache must already match this KVER.
 starlite_select_mxc_ko "$KVER"
 MXC_SKIP=${MXC_SKIP:-0}
+if [ "${MXC_SKIP:-0}" != 1 ]; then
+  starlite_check_trigger_name "$IMAGE_FAMILY" "$MXC_KO"
+fi
 
 # MXC_KO + MXC_VERMAGIC now set
 
